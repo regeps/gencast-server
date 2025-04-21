@@ -62,4 +62,6 @@ gsutil -m cp "gs://$BUCKET/$FOLDER_NAME/*" "$FOLDER_NAME/"
 echo "→ Deleting GCS folder: gs://$BUCKET/$FOLDER_NAME/"
 gsutil -m rm -r "gs://$BUCKET/$FOLDER_NAME/"
 
-echo "Process complete."
+echo "Download complete, processing into population-weighted CSV."
+
+./merge

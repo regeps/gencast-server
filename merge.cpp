@@ -62,7 +62,7 @@ int main(int argc, char* argv[]) {
     }
 
     std::ofstream out("master_" + date + ".csv");
-    out << "latitude,longitude,population,temp_2m\n";
+    out << "forecast_time,latitude,longitude,population,temp_2m\n";
 
     for (const auto& entry : fs::directory_iterator(folder)) {
         const std::string filename = entry.path().filename().string();
@@ -75,13 +75,14 @@ int main(int argc, char* argv[]) {
                 std::string timestamp;
                 double lat, lon, temp;
                 char comma;
+
                 getline(ss, timestamp, ',');
                 ss >> lat >> comma >> lon >> comma >> temp;
 
                 LatLon key{lat, lon};
                 if (populationMap.count(key)) {
                     out << std::fixed << std::setprecision(6)
-                        << lat << "," << lon << "," << static_cast<int>(populationMap[key]) << "," << temp << "\n";
+                        << timestamp << "," << lat << "," << lon << "," << static_cast<int>(populationMap[key]) << "," << temp << "\n";
                 }
             }
         }
