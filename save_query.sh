@@ -1,3 +1,5 @@
+#!/bin/bash
+
 if [ -z "$1" ]; then
   echo "Usage: $0 YYYY-MM-DD"
   exit 1
@@ -32,16 +34,21 @@ bq query \
   ORDER BY forecast_time, latitude, longitude
   "
 
-echo "Exporting table to GCS: gs://$BUCKET/$FOLDER_NAME/"
+echo "→ Exporting table to GCS: gs://$BUCKET/$FOLDER_NAME/"
 
 bq extract \
   --destination_format=CSV \
   "$PROJECT:$DATASET.$TABLE_NAME" \
   "gs://$BUCKET/$FOLDER_NAME/$TABLE_NAME-*.csv"
 
-echo "→ Deleting BigQuery table $DATASET.$TABLE_NAME"
+echo "→ Deleting BigQuery table: $DATASET.$TABLE_NAME"
 
 bq rm -f -t "$PROJECT:$DATASET.$TABLE_NAME"
 
-echo "Process complete"
+echo "→ Creating local directory: $FOLDER_NAME"
+mkdir -p "$FOLDER_NAME"
 
+echo "→ Downloading from GCS to ./$FOLDER_NAME/"
+gsutil -m cp "gs://$BUCKET/$FOLDER_NAME/*" "$FOLDER_NAME/"
+
+echo "Process complete."
