@@ -31,6 +31,7 @@ bq query \
     UNNEST(f.ensemble) AS e
   WHERE
     t.init_time = TIMESTAMP(\"$DATE\")
+    AND e.ensemble_member = '5'
   ORDER BY forecast_time, latitude, longitude
   "
 
